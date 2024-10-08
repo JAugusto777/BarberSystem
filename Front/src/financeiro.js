@@ -86,8 +86,8 @@ const Financeiro = () => {
       const response = await fetch(url);
       const data = await response.json();
 
-      const entradaData = data.map((item) => item.totalEntrada);
-      const saidaData = data.map((item) => item.totalSaida);
+      const entradaData = data.map((item) => Number(item.totalEntrada));
+      const saidaData = data.map((item) => Number(item.totalSaida));
       const totalData = entradaData - saidaData;
 
       const monthNames = [
