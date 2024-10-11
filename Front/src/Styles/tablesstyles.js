@@ -28,11 +28,10 @@ export const Container = styled.div`
 export const Header = styled.div`
  display: flex;
  width: 100%;
-  max-width: 95%;
   margin-bottom: 1rem;
   align-items: center;
   justify-content: space-between;
-  padding: 2rem 1rem 2rem 1rem;
+  padding: 1rem 2rem 1rem 2rem;
   background-color: #000000;
 `;
 export const Content = styled.div`
@@ -40,43 +39,35 @@ export const Content = styled.div`
     gap: 10%;
     justify-content: flex-start;
     border-radius: 30px;
-    width: 100%;
-    max-width: 90%;
-    min-height: 25rem;
+    width: 90%;
     height: auto;
-    margin: 0px 0% 0px 3%;
     padding: 2rem 1rem 2rem 1rem;
     background-color: #272727;
 `;
 
 
 export const TableContainer = styled.div`
-  display: grid;
+  display: flex;
   color: #ffffff;
   width: 100%;
-  height: 100%;
-  max-width: 60%;
+  height: 400px;
+  overflow-y: auto;
   font-family: Poppins;
-  padding-right: 5%;
   
 
     table {
     border-collapse: collapse;
-    width: 100%;
-    min-height: 1%;
-    height: 60%;
-    
     }
-
-    table  tbody  tr {
-      height: 10%;
-    }
+  th {
+  position: sticky;
+  top: 0;
+  background-color: #272727;
+  }
   
   th, td {
     border-right: 1px solid #ffffff; 
     border-bottom: 1px solid #ffffff;
-
-    padding: 8px; 
+    padding: 1rem 2.5rem 1rem 2.5rem;
     text-align: center; 
   }
 

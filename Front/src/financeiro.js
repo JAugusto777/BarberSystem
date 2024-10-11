@@ -55,13 +55,15 @@ const Financeiro = () => {
         categories: [],
         labels: {
           style: { fontSize: "10px", colors: "#fff" },
-          offsetY:0, // Adiciona espaço entre o eixo X e os rótulos
+          offsetY: 0, // Adiciona espaço entre o eixo X e os rótulos
         },
       },
-      yaxis: { 
-        labels: { style: { fontSize: "10px", colors: "#fff" },
-        offsetX:-10, 
-      } },
+      yaxis: {
+        labels: {
+          style: { fontSize: "10px", colors: "#fff" },
+          offsetX: -10,
+        }
+      },
       tooltip: { style: { fontSize: "15px" }, theme: "dark" },
       colors: ["#00E396", "#FF4560"],
     },
@@ -122,17 +124,7 @@ const Financeiro = () => {
           return semanaLabels[item.semana - 1];
         } else {
           return `${item.dia}`;
-          setChartState({
-            chart: {
-              type: "bar",
-              height: "100%",
-              width: "1000%",
-              toolbar: { show: true },
-            },
-            plotOptions: {
-              bar: { dataLabels: { position: "top" }, columnWidth: "110%" },
-            },
-          });
+
         }
       });
 
@@ -197,13 +189,13 @@ const Financeiro = () => {
           <Button iconType={"return"} />
         </Link>
         <HeaderNavButtons>
-          <Link to={"/reg_operacoes"} style={{textDecoration:"none"}}>
+          <Link to={"/reg_operacoes"} style={{ textDecoration: "none" }}>
             <Button
               Label={"NOVA OPERACAO"}
               Container={HeaderFinanceiroButtonContainer}
             />
           </Link>
-          <Link to={"/tables"} style={{textDecoration:"none"}}>
+          <Link to={"/tables"} style={{ textDecoration: "none" }}>
             <Button
               Label={"ENTRADA / SAIDA"}
               Container={HeaderFinanceiroButtonContainer}
@@ -224,8 +216,8 @@ const Financeiro = () => {
       <Content>
         <MetricasContainer>
           <div className="metricas">
-            <div className="movimentacao ">
-              <h1>Movimentação</h1>
+            <div className="movimentacao">
+              <h1>Faturamento</h1>
               <p>R$ {chartData.totalEntrada.toFixed(2)}</p>
             </div>
             <div className="Saída">
@@ -256,36 +248,34 @@ const Financeiro = () => {
           )}
           {showDiaDropdown && (
             <DayLabel>
-              <div className="diaDropdown">
-                <h1>Selecione mês e ano</h1>
-                <Input
-                  type="month"
-                  value={selectedMonth && selectedYear}
-                  onChange={(e) => {
-                    setSelectedMonth(e.target.value.split("-")[1]);
-                    setSelectedYear(e.target.value.split("-")[0]);
-                  }}
-                />
-              </div>
+
+              <h1>Selecione mês e ano</h1>
+              <Input
+                type="month"
+                value={selectedMonth && selectedYear}
+                onChange={(e) => {
+                  setSelectedMonth(e.target.value.split("-")[1]);
+                  setSelectedYear(e.target.value.split("-")[0]);
+                }}
+              />
+
             </DayLabel>
           )}
           {showYearDropdown && (
             <YearLabel>
-              <div className="anoDropdown">
-                <h1>Selecione o Ano</h1>
-                <Input
-                  type="number"
-                  min="2020"
-                  max="2100"
-                  step="1"
-                  value={selectedYear}
-                  placeholder="YYYY"
-                  onChange={(e) => {
-                    setSelectedYear(e.target.value);
-                    console.log(selectedYear);
-                  }}
-                />
-              </div>
+              <h1>Selecione o Ano</h1>
+              <Input
+                type="number"
+                min="2020"
+                max="2100"
+                step="1"
+                value={selectedYear}
+                placeholder="YYYY"
+                onChange={(e) => {
+                  setSelectedYear(e.target.value);
+                  console.log(selectedYear);
+                }}
+              />
             </YearLabel>
           )}
         </MetricasContainer>

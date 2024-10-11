@@ -119,7 +119,7 @@ const Servicos = () => {
           <Button iconType={"return"} />
         </Link>
         <div className="excluirButton">
-          <Link to={"/deleteservicos"} style={{textDecoration: "none"}}>
+          <Link to={"/deleteservicos"} style={{ textDecoration: "none" }}>
             <Button
               type={`submit`}
               Label={"REMOVER PRODUTO"}
@@ -128,50 +128,52 @@ const Servicos = () => {
           </Link>
         </div>
       </Header>
-      <Content>
-        <div className="servicosForm">
-          <h1 className="titulo">Adicione seus produtos e serviços</h1>
-          <form onSubmit={handleSubmit}>
-            <div className="inputRow">
-              <InputContainer>
-                <h1>Serviço</h1>
-                <Input
-                  type={"text"}
-                  value={servico}
-                  onChange={(e) => setServico(e.target.value)}
-                />
-              </InputContainer>
+      <div className="containermain">
+        <h1 className="titulo">Adicione Podutos e Serviços</h1>
+        <Content>
+          <div className="servicosForm">
+            <form onSubmit={handleSubmit}>
+              <div className="inputRow">
+                <InputContainer>
+                  <h1>Serviço</h1>
+                  <Input
+                    type={"text"}
+                    value={servico}
+                    onChange={(e) => setServico(e.target.value)}
+                  />
+                </InputContainer>
 
-              <InputContainer>
-                <h1>Produto</h1>
-                <Input
-                  type={"text"}
-                  value={produto}
-                  onChange={(e) => setProduto(e.target.value)}
-                />
-              </InputContainer>
+                <InputContainer>
+                  <h1>Produto</h1>
+                  <Input
+                    type={"text"}
+                    value={produto}
+                    onChange={(e) => setProduto(e.target.value)}
+                  />
+                </InputContainer>
 
-              <InputContainer>
-                <h1>Valor</h1>
-                <Input
-                  type={"number"}
-                  value={preco}
-                  onChange={(e) => setPreco(e.target.value)}
-                />
-              </InputContainer>
-            </div>
+                <InputContainer>
+                  <h1>Valor</h1>
+                  <Input
+                    type={"number"}
+                    value={preco}
+                    onChange={(e) => setPreco(e.target.value)}
+                  />
+                </InputContainer>
+              </div>
 
-            <div className="formButtonContainer">
-              <Button
-                type={`submit`}
-                Label={"CADASTRAR"}
-                onClick={handleSubmit}
-                Container={Reg_operacoesButtonContainer}
-              />
-            </div>
-          </form>
-        </div>
-      </Content>
+              <div className="formButtonContainer">
+                <Button
+                  type={`submit`}
+                  Label={"CADASTRAR"}
+                  onClick={handleSubmit}
+                  Container={Reg_operacoesButtonContainer}
+                />
+              </div>
+            </form>
+          </div>
+        </Content>
+      </div>
     </Container>
   );
 };

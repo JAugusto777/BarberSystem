@@ -52,7 +52,7 @@ export const Content = styled.div`
   flex-wrap: wrap;
   flex-direction: column;
   justify-content: space-between;
-  width: 80%;
+  width: 70%;
   background-color: #272727;
   border-radius: 2rem;
   padding: 1rem;
@@ -78,44 +78,31 @@ export const MetricasContainer = styled.div`
 `
 
 export const MonthLabel = styled.div`
+  font-size: 0.8rem;
+  padding-right: 1rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: flex-end;
-  padding-right: 2rem;
-
-  .mesDropdown {
-     display: flex;
-    flex-direction: column;
-    align-items: center; 
-  }
+  
   
 `
 export const YearLabel = styled.div`
   display: flex;
-  flex-direction:column;
-
+  font-size: 0.8rem;
+  flex-direction: column;
+  align-items: center;
   justify-content: flex-end;
-  padding-right: 2rem;
-
-  .anoDropdown {
-     display: flex;
-    flex-direction: column;
-    align-items: center; 
-  }
+  padding-right: 1rem;
 `
 
 export const DayLabel = styled.div`
   display: flex;
-
+  font-size: 0.8rem;
+  flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-  padding-right: 2rem;
-
-  .diaDropdown {
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-  }
+  padding-right: 1rem;
 `
 
 export const Grafico = styled.div`

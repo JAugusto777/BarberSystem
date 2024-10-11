@@ -125,75 +125,77 @@ const Reg_operacoes = () => {
         <Link to={"/financeiro"}>
           <Button iconType={"return"} to={"/financeiro"} />
         </Link>
-        <h1>Registro de Operações</h1>
-        <div></div>
       </Header>
-      <Content>
-        <form className="Reg_operacoesForm" onSubmit={handleSubmit}>
-          <InputContainer>
-            <h1>Valor</h1>
-            <Input
-              type={"text"}
-              value={precoTotal}
-              onChange={(e) => setPrecoTotal(e.target.value)}
-            />
-          </InputContainer>
+      <div className="containermain">
+        <h1>Registro de Operações</h1>
 
-          <InputContainer>
-            <h1>Categoria</h1>
-            <Dropdown
-              Container={DropdownContainer}
-              options={categoriaOptions}
-              value={categoria}
-              placeholder={"selecionar"}
-              onChange={(selected) => setCategoria(selected.value)}
-            />
-          </InputContainer>
+        <Content>
+          <form className="Reg_operacoesForm" onSubmit={handleSubmit}>
+            <InputContainer>
+              <h1>Valor</h1>
+              <Input
+                type={"text"}
+                value={precoTotal}
+                onChange={(e) => setPrecoTotal(e.target.value)}
+              />
+            </InputContainer>
 
-          <InputContainer>
-            <h1>Serviço</h1>
-            <Dropdown
-              Container={DropdownContainer}
-              options={servicosOptions}
-              multiple={true}
-              value={servicosSelecionados}
-              onChange={(selected) =>
-                setServicosSelecionados(selected.map((option) => option.value))
-              }
-            />
-          </InputContainer>
+            <InputContainer>
+              <h1>Categoria</h1>
+              <Dropdown
+                Container={DropdownContainer}
+                options={categoriaOptions}
+                value={categoria}
+                placeholder={"selecionar"}
+                onChange={(selected) => setCategoria(selected.value)}
+              />
+            </InputContainer>
 
-          <InputContainer>
-            <h1>Data</h1>
-            <Input
-              type={"date"}
-              value={dataOperacao}
-              onChange={(e) => setDataOperacao(e.target.value)}
-            />
-          </InputContainer>
+            <InputContainer>
+              <h1>Serviço</h1>
+              <Dropdown
+                Container={DropdownContainer}
+                options={servicosOptions}
+                multiple={true}
+                value={servicosSelecionados}
+                onChange={(selected) =>
+                  setServicosSelecionados(selected.map((option) => option.value))
+                }
+              />
+            </InputContainer>
 
-          <InputContainer>
-            <h1>Produto</h1>
-            <Dropdown
-              Container={DropdownContainer}
-              options={produtosOptions}
-              multiple={true}
-              value={produtosSelecionados}
-              onChange={(selected) =>
-                setProdutosSelecionados(selected.map((option) => option.value))
-              }
-            />
-          </InputContainer>
+            <InputContainer>
+              <h1>Data</h1>
+              <Input
+                type={"date"}
+                value={dataOperacao}
+                onChange={(e) => setDataOperacao(e.target.value)}
+              />
+            </InputContainer>
 
-          <InputContainer>
-            <Button
-              type={"submit"}
-              Label={"Registrar"}
-              Container={Reg_operacoesButtonContainer}
-            />
-          </InputContainer>
-        </form>
-      </Content>
+            <InputContainer>
+              <h1>Produto</h1>
+              <Dropdown
+                Container={DropdownContainer}
+                options={produtosOptions}
+                multiple={true}
+                value={produtosSelecionados}
+                onChange={(selected) =>
+                  setProdutosSelecionados(selected.map((option) => option.value))
+                }
+              />
+            </InputContainer>
+
+            <InputContainer>
+              <Button
+                type={"submit"}
+                Label={"Registrar"}
+                Container={Reg_operacoesButtonContainer}
+              />
+            </InputContainer>
+          </form>
+        </Content>
+      </div>
     </Container>
   );
 };

@@ -114,7 +114,6 @@ const Table = () => {
         <div className="metricasTitle">
           <h1>Total de despesas</h1>
           <h2>R$ {Math.abs(totalSaidas).toFixed(2)}</h2>{" "}
-          {/* Math.abs para mostrar valor positivo */}
         </div>
       );
     } else if (selectedOption === "0") {
@@ -141,7 +140,7 @@ const Table = () => {
     <Container>
       <Header>
         <Link to={"/financeiro"}>
-          <Button iconType={"return"}/>
+          <Button iconType={"return"} />
         </Link>
 
         <Dropdown

@@ -9,15 +9,23 @@ export const Container = styled.div`
   justify-content: center;
   background-color: #000000;
   font-family: Poppins;
+
+  .containermain {
+  align-items: center;
+  gap: 2rem;
+  width: 70%;
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+  }
 `
 
 export const Header = styled.div`
   display: flex;
   width: 100%;
-  margin-bottom: 1rem;
   align-items: center;
-  justify-content: space-between;
-  padding: 1.75rem 9rem 2rem 3rem;
+  justify-content: flex-start;
+  padding: 1rem 2rem 1rem 2rem;
   background-color: #000000;
 `   
 
@@ -25,23 +33,21 @@ export const Content = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 60%;
-    height: 500px;
-    padding: 2rem;
+    width:100%;
+    height: 100%;
+    padding: 3rem;
     border-radius: 30px;
     background-color: #272727;
     color: #ffffff;
 
     .Reg_operacoesForm{ 
+    padding: 0rem 6rem 0rem 6rem;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(3, auto);
+    gap: 1rem  4rem;
     justify-items: center;
     align-items: center;
-    height: 500px;
-    gap: 4rem;
-    padding: 2rem;
-    border-radius: 30px;
     background-color: #272727;
     color: #ffffff;
     }

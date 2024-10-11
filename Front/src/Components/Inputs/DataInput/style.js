@@ -8,7 +8,6 @@ export const DatePickerContainer = styled.div`
     appearance: none;
     height:3rem;
     width: 100%;
-    border:  ;
     margin-bottom: 3%;
     border-radius: 1rem;
     background: linear-gradient(90deg, #343434, #303030, #343434);
