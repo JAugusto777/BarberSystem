@@ -10,37 +10,16 @@ import {
 } from "./Styles/tablesstyles";
 import { Link } from "react-router-dom";
 import DatePickerValue from "./Components/Inputs/DataInput/index";
-
 import Button from "./Components/Buttons/index";
 import Dropdown from "./Components/Dropdowns/index";
 import { DropdownContainer } from "./Components/Dropdowns/style";
-import { green } from "@mui/material/colors";
 
 const Table = () => {
   const [operacoes, setOperacoes] = useState([]);
-  const [dataOperacao, setDataOperacao] = useState(dayjs()); // Inicializar como dayjs
-  const [dataOperacaoFinal, setDataOperacaoFinal] = useState(dayjs("")); // Inicializar como dayjs
+  const [dataOperacao, setDataOperacao] = useState(null);
+  const [dataOperacaoFinal, setDataOperacaoFinal] = useState(null);
   const [selectedOption, setSelectedOption] = useState("0");
   const [filteredOperacoes, setFilteredOperacoes] = useState([]);
-
-  useEffect(() => {
-    fetch("http://localhost:3001/operacoes/tables", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        setOperacoes(data);
-        filterTableData(data);
-      })
-      .catch((error) => console.error("Erro ao buscar operações:", error));
-  }, []);
-
-  useEffect(() => {
-    filterTableData(operacoes);
-  }, [dataOperacao, dataOperacaoFinal, selectedOption]);
 
   const produtosOptions = [
     { value: "0", label: "Geral" },
@@ -48,93 +27,77 @@ const Table = () => {
     { value: "2", label: "Saídas" },
   ];
 
-  const filterTableData = (operacoes) => {
-    let filtered = operacoes;
-
-    if (selectedOption !== "0") {
-      filtered = filtered.filter(
-        (operacao) => operacao.categoria === parseInt(selectedOption)
-      );
-    }
-
-    if (dataOperacao || dataOperacaoFinal) {
-      const initialDate = dataOperacao.isValid()
-        ? dataOperacao.startOf("day")
-        : null;
-      const finalDate = dataOperacaoFinal.isValid()
-        ? dataOperacaoFinal.endOf("day")
-        : null;
-
-      filtered = filtered.filter((operacao) => {
-        const operacaoDate = dayjs(operacao.dataOperacao);
-
-        if (initialDate && !finalDate) {
-          return operacaoDate.isSame(initialDate, "day");
-        } else if (initialDate && finalDate) {
-          return (
-            operacaoDate.isSame(initialDate, "day") ||
-            operacaoDate.isSame(finalDate, "day") ||
-            (operacaoDate.isAfter(initialDate) &&
-              operacaoDate.isBefore(finalDate))
-          );
-        } else {
-          return true;
-        }
-      });
-    }
-
-    setFilteredOperacoes(filtered);
-  };
-
-  const handleDateChange = (date, finalDate) => {
-    setDataOperacao(date ? dayjs(date) : null);
-    setDataOperacaoFinal(finalDate ? dayjs(finalDate) : null);
-  };
-
-  const renderMetricas = () => {
-    const totalEntradas = filteredOperacoes
-      .filter((operacao) => operacao.categoria === 1)
-      .reduce((total, operacao) => total + operacao.precoTotal, 0);
-
-    const totalSaidas = filteredOperacoes
-      .filter((operacao) => operacao.categoria === 2)
-      .reduce((total, operacao) => total + operacao.precoTotal, 0);
-
-    const lucro = totalEntradas - totalSaidas; // As saídas são negativas, então somamos para subtrair
-
-    if (selectedOption === "1") {
-      return (
-        <div className="metricasTitle">
-          <h1>Total de entradas</h1>
-          <h2>R$ {totalEntradas.toFixed(2)}</h2>
-        </div>
-      );
-    } else if (selectedOption === "2") {
-      return (
-        <div className="metricasTitle">
-          <h1>Total de despesas</h1>
-          <h2>R$ {Math.abs(totalSaidas).toFixed(2)}</h2>{" "}
-        </div>
-      );
-    } else if (selectedOption === "0") {
-      const totalEntradas = filteredOperacoes
-        .filter((operacao) => operacao.categoria > 0)
-        .reduce((total, operacao) => total + operacao.precoTotal, 0);
-
-      return (
-        <div className="metricasTitle">
-          <h1>Movimentação</h1>
-          <h2>R$ {totalEntradas.toFixed(2)}</h2>
-          <h1>Saldo</h1>
-          <h2 style={{ color: "greenyellow" }}>R$ {lucro.toFixed(2)}</h2>
-          <h1>Saídas</h1>
-          <h2 style={{ color: "red" }}>
-            R$ {Math.abs(totalSaidas).toFixed(2)}
-          </h2>
-        </div>
-      );
+  // Função para buscar dados da API
+  const fetchOperacoes = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/operacoes/tables");
+      const data = await response.json();
+      setOperacoes(data);
+    } catch (error) {
+      console.error("Erro ao buscar operações:", error);
     }
   };
+
+  useEffect(() => {
+    fetchOperacoes();
+  }, []);
+
+  // Função para filtrar operações com base em data e tipo
+  useEffect(() => {
+    const filterTableData = () => {
+      let filtered = [...operacoes]; // Clonar o array de operações
+
+      // Filtro por tipo de operação (ajustado para categorias "entrada" e "saida" como strings)
+      if (selectedOption === "1") {
+        filtered = filtered.filter((operacao) => operacao.categoria === "entrada");
+      } else if (selectedOption === "2") {
+        filtered = filtered.filter((operacao) => operacao.categoria === "saida");
+      }
+
+      // Filtro por intervalo de datas
+      if (dataOperacao && dataOperacaoFinal) {
+        const start = dayjs(dataOperacao).startOf("day");
+        const end = dayjs(dataOperacaoFinal).endOf("day");
+
+        filtered = filtered.filter((operacao) => {
+          const operacaoDate = dayjs(operacao.dataOperacao);
+          return operacaoDate.isBetween(start, end, null, "[]");
+        });
+      }
+
+      setFilteredOperacoes(filtered);
+    };
+
+    filterTableData();
+  }, [dataOperacao, dataOperacaoFinal, selectedOption, operacoes]);
+
+  // Função para calcular métricas
+ // Função para calcular métricas
+const calculateMetrics = () => {
+  let totalEntradas = 0;
+  let totalSaidas = 0;
+
+  filteredOperacoes.forEach((operacao) => {
+    const preco = parseFloat(operacao.precoTotal) || 0; // Converte o preço para número
+
+    if (operacao.categoria === "entrada") {
+      totalEntradas += preco;
+    } else if (operacao.categoria === "saida") {
+      totalSaidas += preco;
+    }
+  });
+
+  // Calcula o lucro, garantindo que não seja negativo
+  const lucro = Math.max(0, totalEntradas - totalSaidas);
+
+  console.log("Operações:", operacoes);
+  console.log("Operações Filtradas:", filteredOperacoes);
+
+  return { totalEntradas, totalSaidas, lucro };
+};
+
+
+  const { totalEntradas, totalSaidas, lucro } = calculateMetrics();
 
   return (
     <Container>
@@ -147,32 +110,46 @@ const Table = () => {
           style={{ textDecoration: "none" }}
           Container={DropdownContainer}
           options={produtosOptions}
-          placeholder={"selecionar"}
+          placeholder={"Selecionar"}
           onChange={(option) => setSelectedOption(option.value)}
           defaultValue={produtosOptions[0]}
         />
       </Header>
+
       <Content>
         <MetricasContainer>
-          {renderMetricas()}
+          <div className="metricasTitle">
+            <h1>Faturamento</h1>
+            <h2>R$ {totalEntradas.toFixed(2)}</h2>
+
+            <h1>Lucro</h1>
+            <h2 style={{ color: "greenyellow" }}>R$ {lucro.toFixed(2)}</h2>
+
+            <h1>Saídas</h1>
+            <h2 style={{ color: "red" }}>
+              R$ {Math.abs(totalSaidas).toFixed(2)}
+            </h2>
+          </div>
+
           <InputContainer>
             <h3>De: </h3>
             <DatePickerValue
               value={dataOperacao}
-              onChange={(date) => handleDateChange(date, dataOperacaoFinal)}
+              onChange={(date) => setDataOperacao(date)}
             />
             <h3>Até: </h3>
             <DatePickerValue
               value={dataOperacaoFinal}
-              onChange={(date) => handleDateChange(dataOperacao, date)}
+              onChange={(date) => setDataOperacaoFinal(date)}
             />
           </InputContainer>
         </MetricasContainer>
+
         <TableContainer>
           <table>
             <thead>
               <tr>
-                <th>DATA </th>
+                <th>DATA</th>
                 <th>Aquisição / Pagamento</th>
                 <th>Valor</th>
               </tr>
@@ -184,7 +161,7 @@ const Table = () => {
                   <td>
                     {operacao.Produtos} <br /> {operacao.Servicos}
                   </td>
-                  <td>R$ {operacao.precoTotal}</td>
+                  <td>R$ {parseFloat(operacao.precoTotal).toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>

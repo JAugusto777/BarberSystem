@@ -89,6 +89,7 @@ const Financeiro = () => {
       const data = await response.json();
 
       const entradaData = data.map((item) => Number(item.totalEntrada));
+      
       const saidaData = data.map((item) => Number(item.totalSaida));
       const totalData = entradaData - saidaData;
 
