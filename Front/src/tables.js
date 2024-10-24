@@ -47,11 +47,11 @@ const Table = () => {
     const filterTableData = () => {
       let filtered = [...operacoes]; // Clonar o array de operações
 
-      // Filtro por tipo de operação (ajustado para categorias "entrada" e "saida" como strings)
+      // Filtro por tipo de operação
       if (selectedOption === "1") {
-        filtered = filtered.filter((operacao) => operacao.categoria === "entrada");
+        filtered = filtered.filter((operacao) => operacao.categoria === 1); // Use 1 para entradas
       } else if (selectedOption === "2") {
-        filtered = filtered.filter((operacao) => operacao.categoria === "saida");
+        filtered = filtered.filter((operacao) => operacao.categoria === 2); // Use 2 para saídas
       }
 
       // Filtro por intervalo de datas
@@ -71,31 +71,29 @@ const Table = () => {
     filterTableData();
   }, [dataOperacao, dataOperacaoFinal, selectedOption, operacoes]);
 
-  // Função para calcular métricas
- // Função para calcular métricas
-const calculateMetrics = () => {
-  let totalEntradas = 0;
-  let totalSaidas = 0;
+  const calculateMetrics = () => {
+    let totalEntradas = 0;
+    let totalSaidas = 0;
 
-  filteredOperacoes.forEach((operacao) => {
-    const preco = parseFloat(operacao.precoTotal) || 0; // Converte o preço para número
+    filteredOperacoes.forEach((operacao) => {
+      const preco = parseFloat(operacao.precoTotal) || 0;
 
-    if (operacao.categoria === "entrada") {
-      totalEntradas += preco;
-    } else if (operacao.categoria === "saida") {
-      totalSaidas += preco;
-    }
-  });
+      if (operacao.categoria === 1) {
+        totalEntradas += preco;
+      } else if (operacao.categoria === 2) {
+        totalSaidas += preco;
+      }
+    });
 
-  // Calcula o lucro, garantindo que não seja negativo
-  const lucro = Math.max(0, totalEntradas - totalSaidas);
+    // Calcula o lucro, garantindo que não seja negativo
+    const lucro = totalEntradas - totalSaidas;
 
-  console.log("Operações:", operacoes);
-  console.log("Operações Filtradas:", filteredOperacoes);
+    console.log("Lucro: " + lucro);
+    console.log("Total Entradas:", totalEntradas);
+    console.log("total saidas", totalSaidas);
 
-  return { totalEntradas, totalSaidas, lucro };
-};
-
+    return { totalEntradas, totalSaidas, lucro };
+  };
 
   const { totalEntradas, totalSaidas, lucro } = calculateMetrics();
 
@@ -122,8 +120,10 @@ const calculateMetrics = () => {
             <h1>Faturamento</h1>
             <h2>R$ {totalEntradas.toFixed(2)}</h2>
 
-            <h1>Lucro</h1>
-            <h2 style={{ color: "greenyellow" }}>R$ {lucro.toFixed(2)}</h2>
+            <h1>{lucro < 0 ? "Prejuízo" : "Lucro"}</h1>
+            <h2 style={{ color: lucro < 0 ? "red" : "greenyellow" }}>
+              R$ {Math.abs(lucro).toFixed(2)}
+            </h2>
 
             <h1>Saídas</h1>
             <h2 style={{ color: "red" }}>
@@ -159,7 +159,9 @@ const calculateMetrics = () => {
                 <tr key={operacao.IdOperacao}>
                   <td>{dayjs(operacao.dataOperacao).format("DD/MM/YYYY")}</td>
                   <td>
-                    {operacao.Produtos} <br /> {operacao.Servicos}
+                    {operacao.Produtos && <div>{operacao.Produtos}</div>}
+                    {operacao.Servicos && <div>{operacao.Servicos}</div>}
+                    {operacao.outros && <div>{operacao.outros}</div>}
                   </td>
                   <td>R$ {parseFloat(operacao.precoTotal).toFixed(2)}</td>
                 </tr>

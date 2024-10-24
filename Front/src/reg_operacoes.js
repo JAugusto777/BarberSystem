@@ -22,6 +22,7 @@ const Reg_operacoes = () => {
   const [produtosOptions, setProdutosOptions] = useState([]);
   const [produtosSelecionados, setProdutosSelecionados] = useState([]);
   const [servicosSelecionados, setServicosSelecionados] = useState([]);
+  const [outros, setOutros] = useState("")
 
   useEffect(() => {
     fetch("http://localhost:3001/")
@@ -76,12 +77,10 @@ const Reg_operacoes = () => {
   ];
 
   const handleSubmit = (event) => {
-    console.log("handleSubmit foi chamado!");
     event.preventDefault();
-
+    
     if (!dataOperacao || !categoria || !precoTotal) {
       alert("Os campos de categoria, valor e data nao podem estar em branco.");
-      console.log(dataOperacao, categoria, precoTotal);
       return;
     }
 
@@ -89,11 +88,10 @@ const Reg_operacoes = () => {
       dataOperacao: dataOperacao,
       categoria: categoria,
       precoTotal: precoTotal,
-      Produtos: produtosSelecionados, // Array de IDs de produtos
-      Servicos: servicosSelecionados, // Array de IDs de serviços
+      Produtos: produtosSelecionados,
+      Servicos: servicosSelecionados,
+      Outros:  outros
     };
-
-    console.log(newRegister);
 
     fetch("http://localhost:3001/operacoes", {
       method: "POST",
@@ -102,22 +100,28 @@ const Reg_operacoes = () => {
       },
       body: JSON.stringify(newRegister),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        fetch("http://localhost:3001/operacoes")
-          .then((response) => response.json())
-          .then((data) => {
-            // Verifique se data é um array ou objeto
-            if (Array.isArray(data)) {
-              setData(data);
-              alert("operacao registrada com sucesso!");
-            } else {
-              console.error("Esperava um array, mas obtive:", data);
-            }
-          })
-          .catch((err) => console.error("Erro ao buscar operações:", err));
-      });
-  };
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then((data) => {
+      alert("Operação registrada com sucesso!");
+      // Reset form fields
+      setDataOperacao("");
+      setCategoria("");
+      setPrecoTotal("");
+      setProdutosSelecionados([]);
+      setServicosSelecionados([]);
+      setOutros("");
+    })
+    .catch((err) => {
+      console.error("Erro ao registrar operação:", err);
+      alert("Houve um erro ao registrar a operação. Tente novamente.");
+    });
+};
+
 
   return (
     <Container>
@@ -159,7 +163,9 @@ const Reg_operacoes = () => {
                 multiple={true}
                 value={servicosSelecionados}
                 onChange={(selected) =>
-                  setServicosSelecionados(selected.map((option) => option.value))
+                  setServicosSelecionados(
+                    selected.map((option) => option.value)
+                  )
                 }
               />
             </InputContainer>
@@ -181,11 +187,21 @@ const Reg_operacoes = () => {
                 multiple={true}
                 value={produtosSelecionados}
                 onChange={(selected) =>
-                  setProdutosSelecionados(selected.map((option) => option.value))
+                  setProdutosSelecionados(
+                    selected.map((option) => option.value)
+                  )
                 }
               />
             </InputContainer>
 
+            <InputContainer>
+              <h1>Outros</h1>
+              <Input
+                type={"text"}
+                value={outros}
+                onChange={(e) => setOutros(e.target.value)}
+              />
+            </InputContainer>
             <InputContainer>
               <Button
                 type={"submit"}

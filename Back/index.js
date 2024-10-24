@@ -8,7 +8,7 @@ app.use(express.json());
 
 const allowCors = (req, res, next) => {
   res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000'); // Substitua pelo seu domínio
+  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000'); 
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
   res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
 
@@ -25,11 +25,10 @@ app.use(allowCors);
 
 // Conexão com o banco de dados MySQL
 const db = mysql.createConnection({
-  host: 'junction.proxy.rlwy.net',
+  host: 'localhost',
   user: 'root',
-  password: 'RCWbIeRvKwvtbYdBDECHhOujGXdhACfG',
+  password: 'Marc3code',
   database: 'Financeiro',
-  port: 43646
 });
 
 db.connect((err) => {
@@ -130,8 +129,20 @@ app.get("/operacoes/diario", (req, res) => {
 app.get("/operacoes/tables", (req, res) => {
   
   const { dataInicio, dataFim, categoria } = req.query;
+  
   let sql =
-    "SELECT o.IdOperacao, o.dataOperacao, o.categoria, o.precoTotal, p.Nome AS Produtos, s.Nome AS Servicos FROM operacoes o LEFT JOIN produtos p ON o.IdProduto = p.IdProduto LEFT JOIN servicos s ON o.IdServico = s.IdServico";
+    `SELECT 
+      o.IdOperacao, 
+      o.dataOperacao, 
+      o.categoria, 
+      o.precoTotal, 
+      p.Nome AS Produtos, 
+      s.Nome AS Servicos, 
+      o.outros
+    FROM operacoes o 
+    LEFT JOIN produtos p ON o.IdProduto = p.IdProduto 
+    LEFT JOIN servicos s ON o.IdServico = s.IdServico`;
+
   const filters = [];
 
   if (categoria) {
@@ -159,6 +170,7 @@ app.get("/operacoes/tables", (req, res) => {
   });
 });
 
+
 // Rotas POST
 app.post("/servicos", (req, res) => {
   const sql = "insert into servicos (nome, preco) values(?, ?)";
@@ -185,17 +197,19 @@ app.post("/produtos", (req, res) => {
 });
 
 app.post("/operacoes", (req, res) => {
-  const { dataOperacao, categoria, precoTotal, Produtos, Servicos } = req.body;
+  const { dataOperacao, categoria, precoTotal, Produtos, Servicos, Outros } = req.body;
 
   const sqlInsertOperacao =
-    "INSERT INTO operacoes (dataOperacao, categoria, precoTotal, IdProduto, IdServico) VALUES (?, ?, ?, ?, ?)";
+    "INSERT INTO operacoes (dataOperacao, categoria, precoTotal, IdProduto, IdServico, Outros) VALUES (?, ?, ?, ?, ?, ?)";
 
+  // Pega o primeiro produto e serviço, ou null se não houver
   const produtoId = Produtos.length > 0 ? Produtos[0] : null;
   const servicoId = Servicos.length > 0 ? Servicos[0] : null;
 
+  // Executa a query de inserção
   db.query(
     sqlInsertOperacao,
-    [dataOperacao, categoria, precoTotal, produtoId, servicoId],
+    [dataOperacao, categoria, precoTotal, produtoId, servicoId, Outros],
     (err, result) => {
       if (err) {
         console.error("Erro ao inserir operação:", err);
@@ -204,6 +218,7 @@ app.post("/operacoes", (req, res) => {
 
       const operacaoId = result.insertId;
 
+      // Se houver mais de um produto ou serviço, faz a atualização
       if (Produtos.length > 1 || Servicos.length > 1) {
         const sqlUpdateOperacao =
           "UPDATE operacoes SET IdProduto = ?, IdServico = ? WHERE IdOperacao = ?";
@@ -229,6 +244,8 @@ app.post("/operacoes", (req, res) => {
     }
   );
 });
+
+
 
 // Iniciar servidor
 const PORT = process.env.PORT || 3001;
