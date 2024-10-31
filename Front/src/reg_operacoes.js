@@ -200,16 +200,19 @@ const Reg_operacoes = () => {
                 type={"text"}
                 value={outros}
                 onChange={(e) => setOutros(e.target.value)}
+                placeholder={"Algo não cadastrado..."}
               />
             </InputContainer>
-            <InputContainer>
+            
+          </form>
+          <InputContainer>
               <Button
                 type={"submit"}
                 Label={"Registrar"}
                 Container={Reg_operacoesButtonContainer}
+                
               />
             </InputContainer>
-          </form>
         </Content>
       </div>
     </Container>

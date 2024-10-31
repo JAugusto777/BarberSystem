@@ -37,10 +37,10 @@ export const Header = styled.div`
 export const Content = styled.div`
     display: flex;
     gap: 10%;
+    height: 80vh;
     justify-content: flex-start;
     border-radius: 30px;
     width: 90%;
-    height: auto;
     padding: 2rem 1rem 2rem 1rem;
     background-color: #272727;
 `;
@@ -50,12 +50,12 @@ export const TableContainer = styled.div`
   display: flex;
   color: #ffffff;
   width: 100%;
-  height: 400px;
+  height: 70vh;
   overflow-y: auto;
   font-family: Poppins;
   
-
     table {
+    width: 90%;
     border-collapse: collapse;
     }
   th {
@@ -63,11 +63,13 @@ export const TableContainer = styled.div`
   top: 0;
   background-color: #272727;
   }
-  
+  tr > td {
+    height: 3rem;
+  }
   th, td {
     border-right: 1px solid #ffffff; 
     border-bottom: 1px solid #ffffff;
-    padding: 1rem 2.5rem 1rem 2.5rem;
+    padding: 0rem 2.5rem 0rem 2.5rem;
     text-align: center; 
   }
 

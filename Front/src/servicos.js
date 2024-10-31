@@ -118,15 +118,6 @@ const Servicos = () => {
         <Link to={"/"}>
           <Button iconType={"return"} />
         </Link>
-        <div className="excluirButton">
-          <Link to={"/deleteservicos"} style={{ textDecoration: "none" }}>
-            <Button
-              type={`submit`}
-              Label={"REMOVER PRODUTO"}
-              Container={Reg_operacoesButtonContainer}
-            />
-          </Link>
-        </div>
       </Header>
       <div className="containermain">
         <h1 className="titulo">Adicione Podutos e Serviços</h1>

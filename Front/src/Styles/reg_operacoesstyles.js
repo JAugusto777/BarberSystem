@@ -12,7 +12,7 @@ export const Container = styled.div`
 
   .containermain {
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
   width: 70%;
   height: 70%;
   display: flex;
@@ -33,9 +33,10 @@ export const Content = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    gap: 3rem;
     width:100%;
-    height: 100%;
-    padding: 3rem;
+    padding:1rem 2rem;
     border-radius: 30px;
     background-color: #272727;
     color: #ffffff;
@@ -45,7 +46,7 @@ export const Content = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: repeat(3, auto);
-    gap: 1rem  4rem;
+    gap: 1rem  6rem;
     justify-items: center;
     align-items: center;
     background-color: #272727;
