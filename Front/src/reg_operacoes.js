@@ -203,9 +203,8 @@ const Reg_operacoes = () => {
                 placeholder={"Algo não cadastrado..."}
               />
             </InputContainer>
-            
-          </form>
-          <InputContainer>
+                  
+            <InputContainer>
               <Button
                 type={"submit"}
                 Label={"Registrar"}
@@ -213,6 +212,8 @@ const Reg_operacoes = () => {
                 
               />
             </InputContainer>
+          </form>
+   
         </Content>
       </div>
     </Container>
