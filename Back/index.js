@@ -7,12 +7,18 @@ const cors = require("cors");
 app.use(express.json());
 
 const allowCors = (req, res, next) => {
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000'); 
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
+  res.setHeader("Access-Control-Allow-Credentials", true);
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,OPTIONS,PATCH,DELETE,POST,PUT"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version"
+  );
 
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     res.status(200).end();
     return;
   }
@@ -25,11 +31,10 @@ app.use(allowCors);
 
 // Conexão com o banco de dados MySQL
 const db = mysql.createConnection({
-  host: 'autorack.proxy.rlwy.net',
-  user: 'root',
-  password: 'OYOYuIszNSrTdpvDXrFDYMifRLFIKlsZ',
-  database: 'financeiro',
-  port: 53180
+  host: "localhost",
+  user: "root",
+  password: "Marc3code",
+  database: "financeiro",
 });
 
 db.connect((err) => {
@@ -39,7 +44,7 @@ db.connect((err) => {
 
 // Rotas GET
 app.get("/", (req, res) => {
-  res.setHeader('Access-Controll-Alow-Origin', 'http://localhost:3000');
+  res.setHeader("Access-Controll-Alow-Origin", "http://localhost:3000");
   res.json("backend");
 });
 
@@ -60,12 +65,11 @@ app.get("/produtos", (req, res) => {
 });
 
 app.get("/operacoes", (req, res) => {
-  
   const sqlSelect =
-    "SELECT o.IdOperacao, o.dataOperacao, o.categoria, o.precoTotal, p.Nome AS NomeProduto, s.Nome AS NomeServico " +
+    "SELECT o.IdOperacao, o.dataOperacao, o.categoria, o.precoTotal, o.nome_cliente, p.Nome AS NomeProduto, s.Nome AS NomeServico " +
     "FROM operacoes o " +
     "LEFT JOIN produtos p ON o.IdProduto = p.IdProduto " +
-    "LEFT JOIN servicos s ON o.IdServico = s.IdServico";
+    "LEFT JOIN servicos s ON o.IdServico = s.IdServico ";
 
   db.query(sqlSelect, (err, results) => {
     if (err) {
@@ -128,11 +132,9 @@ app.get("/operacoes/diario", (req, res) => {
 });
 
 app.get("/operacoes/tables", (req, res) => {
-  
   const { dataInicio, dataFim, categoria } = req.query;
-  
-  let sql =
-    `SELECT 
+
+  let sql = `SELECT 
       o.IdOperacao, 
       o.dataOperacao, 
       o.categoria, 
@@ -154,7 +156,9 @@ app.get("/operacoes/tables", (req, res) => {
     filters.push(`o.dataOperacao = ${db.escape(dataInicio)}`);
   } else if (dataInicio && dataFim) {
     filters.push(
-      `o.dataOperacao BETWEEN ${db.escape(dataInicio)} AND ${db.escape(dataFim)}`
+      `o.dataOperacao BETWEEN ${db.escape(dataInicio)} AND ${db.escape(
+        dataFim
+      )}`
     );
   }
 
@@ -171,6 +175,31 @@ app.get("/operacoes/tables", (req, res) => {
   });
 });
 
+app.get("/clientes", (req, res) => {
+  const sql = "select * from clientes";
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Erro ao buscar agendamentos:", err);
+      return res.status(500).json({ message: "Erro ao buscar agendamentos" });
+    }
+
+    res.json(results);
+  });
+});
+
+app.get("/agendamentos", (req, res) => {
+  const sql = "select * from agendamentos";
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error("Erro ao buscar agendamentos:", err);
+      return res.status(500).json({ message: "Erro ao buscar agendamentos" });
+    }
+
+    res.json(results);
+  });
+});
 
 // Rotas POST
 app.post("/servicos", (req, res) => {
@@ -198,10 +227,11 @@ app.post("/produtos", (req, res) => {
 });
 
 app.post("/operacoes", (req, res) => {
-  const { dataOperacao, categoria, precoTotal, Produtos, Servicos, Outros } = req.body;
+  const { dataOperacao, categoria, precoTotal, Produtos, Servicos, Outros, nomeCliente } =
+    req.body;
 
   const sqlInsertOperacao =
-    "INSERT INTO operacoes (dataOperacao, categoria, precoTotal, IdProduto, IdServico, Outros) VALUES (?, ?, ?, ?, ?, ?)";
+    "INSERT INTO operacoes (dataOperacao, categoria, precoTotal, IdProduto, IdServico, Outros, nome_cliente) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
   // Pega o primeiro produto e serviço, ou null se não houver
   const produtoId = Produtos.length > 0 ? Produtos[0] : null;
@@ -210,7 +240,7 @@ app.post("/operacoes", (req, res) => {
   // Executa a query de inserção
   db.query(
     sqlInsertOperacao,
-    [dataOperacao, categoria, precoTotal, produtoId, servicoId, Outros],
+    [dataOperacao, categoria, precoTotal, produtoId, servicoId, Outros, nomeCliente],
     (err, result) => {
       if (err) {
         console.error("Erro ao inserir operação:", err);
@@ -233,7 +263,9 @@ app.post("/operacoes", (req, res) => {
           (err, result) => {
             if (err) {
               console.error("Erro ao atualizar operação:", err);
-              return res.status(500).json({ message: "Erro ao atualizar operação" });
+              return res
+                .status(500)
+                .json({ message: "Erro ao atualizar operação" });
             }
 
             res.json({ message: "Operação atualizada com sucesso" });
@@ -245,8 +277,6 @@ app.post("/operacoes", (req, res) => {
     }
   );
 });
-
-
 
 // Iniciar servidor
 const PORT = process.env.PORT || 3001;

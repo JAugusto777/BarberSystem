@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import {
   Container,
   Content,
@@ -22,7 +22,9 @@ const Reg_operacoes = () => {
   const [produtosOptions, setProdutosOptions] = useState([]);
   const [produtosSelecionados, setProdutosSelecionados] = useState([]);
   const [servicosSelecionados, setServicosSelecionados] = useState([]);
-  const [outros, setOutros] = useState("")
+  const [outros, setOutros] = useState("");
+  const [nomeCliente, setNomeCliente] = useState("");
+  const [historicoOperacoes, setHistoricoOperacoes] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:3001/")
@@ -67,9 +69,52 @@ const Reg_operacoes = () => {
       }
     };
 
+    const getOperacoes = async () => {
+      try {
+        const response = await fetch("http://localhost:3001/operacoes");
+        const data = await response.json();
+        if (Array.isArray(data)) {
+          const OperacoesFormatadas = data.map((operacao) => ({
+            id: operacao.IdOperacao,
+            data: operacao.dataOperacao,
+            valor: operacao.precoTotal,
+            nomeCliente: operacao.nome_cliente,
+            categoria: operacao.categoria,
+          }));
+          setHistoricoOperacoes(OperacoesFormatadas);
+          console.log("Operacoes carregadas:", OperacoesFormatadas);
+        } else {
+          console.error("Dados de operacoes inválidos:", data);
+        }
+      } catch (err) {
+        console.error("Erro ao buscar operacoes:", err);
+      }
+    };
+
     getProdutos();
     getServicos();
+    getOperacoes();
   }, []);
+
+  const filtrarOperacoes = () => {
+    const hoje = new Date();
+    const hojeString = `${hoje.getFullYear()}-${(hoje.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}-${hoje.getDate().toString().padStart(2, "0")}`;
+  
+    const filteredOperacoes = historicoOperacoes.filter((operacao) => {
+      const dataOperacao = new Date(operacao.data);
+      const dataOperacaoString = `${dataOperacao.getFullYear()}-${(dataOperacao.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}-${dataOperacao.getDate().toString().padStart(2, "0")}`;
+  
+      return dataOperacaoString === hojeString;
+    });
+  
+    console.log("Operacoes filtradas:", filteredOperacoes);
+    return filteredOperacoes;
+  };
+  
 
   const categoriaOptions = [
     { value: "1", label: "Entrada" },
@@ -78,7 +123,7 @@ const Reg_operacoes = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    
+
     if (!dataOperacao || !categoria || !precoTotal) {
       alert("Os campos de categoria, valor e data nao podem estar em branco.");
       return;
@@ -90,8 +135,11 @@ const Reg_operacoes = () => {
       precoTotal: precoTotal,
       Produtos: produtosSelecionados,
       Servicos: servicosSelecionados,
-      Outros:  outros
+      Outros: outros,
+      nomeCliente: nomeCliente,
     };
+
+    console.log(newRegister);
 
     fetch("http://localhost:3001/operacoes", {
       method: "POST",
@@ -100,28 +148,28 @@ const Reg_operacoes = () => {
       },
       body: JSON.stringify(newRegister),
     })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then((data) => {
-      alert("Operação registrada com sucesso!");
-      // Reset form fields
-      setDataOperacao("");
-      setCategoria("");
-      setPrecoTotal("");
-      setProdutosSelecionados([]);
-      setServicosSelecionados([]);
-      setOutros("");
-    })
-    .catch((err) => {
-      console.error("Erro ao registrar operação:", err);
-      alert("Houve um erro ao registrar a operação. Tente novamente.");
-    });
-};
-
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        alert("Operação registrada com sucesso!");
+        // Reset form fields
+        setDataOperacao("");
+        setCategoria("");
+        setPrecoTotal("");
+        setProdutosSelecionados([]);
+        setServicosSelecionados([]);
+        setOutros("");
+        setNomeCliente("");
+      })
+      .catch((err) => {
+        console.error("Erro ao registrar operação:", err);
+        alert("Houve um erro ao registrar a operação. Tente novamente.");
+      });
+  };
 
   return (
     <Container>
@@ -203,17 +251,47 @@ const Reg_operacoes = () => {
                 placeholder={"Algo não cadastrado..."}
               />
             </InputContainer>
-                  
+
+            <InputContainer>
+              <h1>Nome do cliente</h1>
+              <Input
+                type={"text"}
+                value={nomeCliente}
+                onChange={(e) => setNomeCliente(e.target.value)}
+              />
+            </InputContainer>
+
             <InputContainer>
               <Button
                 type={"submit"}
                 Label={"Registrar"}
                 Container={Reg_operacoesButtonContainer}
-                
               />
             </InputContainer>
           </form>
-   
+          <div>
+            <h1>Histórico de Operações</h1>
+            <table>
+              <thead>
+                <tr>
+                  <th>Valor</th>
+                  <th>Nome do Cliente</th>
+                  <th>Categoria</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtrarOperacoes().map((operacao) => (
+                  <tr key={operacao.id}>
+                    <td>{operacao.valor}</td>
+                    <td>{operacao.nomeCliente}</td>
+                    <td>{operacao.categoria == 1 ? "Entrada" : "Saída"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <Link to={"/operacoes"}></Link>
+          </div>
         </Content>
       </div>
     </Container>
