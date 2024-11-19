@@ -106,3 +106,5 @@ export const InputContainer = styled.div`
       font-size: ;
     }
 `
+
+export default TableContainer;

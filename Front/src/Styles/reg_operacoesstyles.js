@@ -1,23 +1,29 @@
 import styled from "styled-components";
 
 export const Container = styled.div`
+  body{
+    height: 100vh;
+    margin: 0px;
+    width: 100vw;
+    padding: 0px;
+    margin:0px;
+  }
   display: flex;
   flex-direction: column;
-  width: 100vw;
-  heigth: 100vh;
   align-items: center;
-  justify-content: center;
+  height: 100%;
+  width: 100%;
   background-color: #000000;
   font-family: Poppins;
 
   .containermain {
-  align-items: center;
-  gap: 1rem;
-  width: 70%;
-  height: 70%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+
   }
+
 `
 
 export const Header = styled.div`
@@ -27,35 +33,55 @@ export const Header = styled.div`
   justify-content: flex-start;
   padding: 1rem 2rem 1rem 2rem;
   background-color: #000000;
+  
 `   
 
 export const Content = styled.div`
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
     gap: 3rem;
-    width:100%;
-    padding:1rem 2rem;
-    border-radius: 30px;
-    background-color: #272727;
-    color: #ffffff;
+    height: 25rem;
 
     .Reg_operacoesForm{ 
-    padding: 0rem 6rem 0rem 6rem;
+    padding: 1rem 3rem 1rem 3rem;
+    height: 26rem;
+    width: 100%;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(3, auto);
-    gap: 1rem  6rem;
-    justify-items: center;
-    align-items: center;
+    grid-template-columns: 18rem 18rem;
+    grid-template-rows: 6rem 6rem 6rem 6rem;
     background-color: #272727;
+    border-radius: 1rem;
     color: #ffffff;
+    }
+
+    .historico {
+    
+    display: flex;
+    align-items: center;
+    gap:1rem;
+    flex-direction: column;
+    background-color: #272727;
+    width: auto;
+    height: 26rem;
+    border-radius: 1rem;
+    padding: 2rem;
+
+      h2 {
+      font-size: 2rem; 
+      white-space: nowrap;
+      
+      }
     }
 `
 
 
 export const InputContainer = styled.div`
     display: flex;
-    flex-direction: column
+    flex-direction: column;
+    align-items: center;
+
+    h1 {
+      font-size: 1.5rem;
+    }
+    
+
 `

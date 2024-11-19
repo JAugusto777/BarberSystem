@@ -74,11 +74,12 @@ justify-content: center;
 align-items: center;
 font-weight: 600;
 background-color: #ffffff;
-
 width: 10rem;
 height: 3rem;
+margin-top: 2rem;
+margin-left: 4rem;
 
-border-radius: 5rem;
+border-radius: 0.5rem;
 color: #000000;
 font-family: Poppins;
 

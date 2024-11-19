@@ -7,11 +7,13 @@ import {
   Header,
   InputContainer,
 } from "./Styles/reg_operacoesstyles";
+import {GlobalStyle} from "./Styles/homestyles";
 import Input from "./Components/Inputs/index";
 import Dropdown from "./Components/Dropdowns/index";
 import Button from "./Components/Buttons/index";
 import { Reg_operacoesButtonContainer } from "./Components/Buttons/style";
 import { DropdownContainer } from "./Components/Dropdowns/style";
+import TableContainer from "./Styles/tablesstyles";
 
 const Reg_operacoes = () => {
   const [data, setData] = useState([]);
@@ -172,6 +174,8 @@ const Reg_operacoes = () => {
   };
 
   return (
+    
+    
     <Container>
       <Header>
         <Link to={"/financeiro"}>
@@ -179,18 +183,19 @@ const Reg_operacoes = () => {
         </Link>
       </Header>
       <div className="containermain">
-        <h1>Registro de Operações</h1>
+        <h1>REGISTRO DE OPERAÇÕES</h1>
 
         <Content>
           <form className="Reg_operacoesForm" onSubmit={handleSubmit}>
-            <InputContainer>
-              <h1>Valor</h1>
+          <InputContainer>
+              <h1>Cliente</h1>
               <Input
                 type={"text"}
-                value={precoTotal}
-                onChange={(e) => setPrecoTotal(e.target.value)}
+                value={nomeCliente}
+                onChange={(e) => setNomeCliente(e.target.value)}
               />
             </InputContainer>
+            
 
             <InputContainer>
               <h1>Categoria</h1>
@@ -241,7 +246,15 @@ const Reg_operacoes = () => {
                 }
               />
             </InputContainer>
-
+<InputContainer>
+              <h1>Valor</h1>
+              <Input
+                type={"text"}
+                value={precoTotal}
+                onChange={(e) => setPrecoTotal(e.target.value)}
+                autocomplete={"off"}
+              />
+            </InputContainer>
             <InputContainer>
               <h1>Outros</h1>
               <Input
@@ -252,30 +265,21 @@ const Reg_operacoes = () => {
               />
             </InputContainer>
 
-            <InputContainer>
-              <h1>Nome do cliente</h1>
-              <Input
-                type={"text"}
-                value={nomeCliente}
-                onChange={(e) => setNomeCliente(e.target.value)}
-              />
-            </InputContainer>
-
-            <InputContainer>
               <Button
                 type={"submit"}
                 Label={"Registrar"}
                 Container={Reg_operacoesButtonContainer}
               />
-            </InputContainer>
+         
           </form>
-          <div>
-            <h1>Histórico de Operações</h1>
+          <div className="historico">
+            <h2>Histórico de Operações</h2>
+            <TableContainer>
             <table>
               <thead>
                 <tr>
                   <th>Valor</th>
-                  <th>Nome do Cliente</th>
+                  <th>Cliente</th>
                   <th>Categoria</th>
                 </tr>
               </thead>
@@ -289,11 +293,12 @@ const Reg_operacoes = () => {
                 ))}
               </tbody>
             </table>
-
+            </TableContainer>
             <Link to={"/operacoes"}></Link>
           </div>
         </Content>
       </div>
+      
     </Container>
   );
 };
