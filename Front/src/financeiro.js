@@ -198,7 +198,7 @@ const Financeiro = () => {
           </Link>
           <Link to={"/tables"} style={{ textDecoration: "none" }}>
             <Button
-              Label={"ENTRADA / SAIDA"}
+              Label={"HISTÓRICO"}
               Container={HeaderFinanceiroButtonContainer}
             />
           </Link>

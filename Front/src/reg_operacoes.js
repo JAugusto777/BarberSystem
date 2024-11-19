@@ -166,6 +166,7 @@ const Reg_operacoes = () => {
         setServicosSelecionados([]);
         setOutros("");
         setNomeCliente("");
+        window.location.reload();
       })
       .catch((err) => {
         console.error("Erro ao registrar operação:", err);
