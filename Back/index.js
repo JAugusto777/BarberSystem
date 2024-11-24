@@ -31,10 +31,11 @@ app.use(allowCors);
 
 // Conexão com o banco de dados MySQL
 const db = mysql.createConnection({ 
-  host: 'localhost', 
-  user: 'root', 
-  password: 'Marc3code',
-  database: 'financeiro'
+  host: 'autorack.proxy.rlwy.net',
+  user: 'root',
+  password: 'OYOYuIszNSrTdpvDXrFDYMifRLFIKlsZ',
+  database: 'financeiro',
+  port: 53180
 });
 
 db.connect((err) => {
