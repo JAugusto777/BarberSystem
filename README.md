@@ -1,42 +1,24 @@
-﻿# BarberSystem
+# Sistema de Controle Financeiro para Barbearia
 
-- #Correção de Bug#: Resolver o problema em que é necessário atualizar a página após registrar uma nova operação. Esse erro ocorre ao tentar registrar outra operação sem atualização, como se houvesse um campo obrigatório em branco.
+Este projeto é um sistema completo desenvolvido para atender as necessidades de gerenciamento de uma barbearia. Ele integra funcionalidades de controle financeiro, agendamento de horários, gestão de funcionários e gerenciamento de estoque, oferecendo uma visão geral eficiente através de um **dashboard interativo**.
 
-- #Adicionar Histórico de Operações#: Incluir um histórico de operações ao lado do formulário principal, exibindo as últimas entradas e saídas para facilitar o acompanhamento.
+## Funcionalidades
 
-- #Campo para Nome do Cliente#: Adicionar um campo para registrar o nome do cliente na tela de operações.
+- **Controle Financeiro**: Gerencie receitas e despesas, acompanhe o fluxo de caixa e visualize relatórios financeiros detalhados.
+- **Agendamento de Horários**: Sistema prático para registrar, editar e consultar horários agendados, garantindo uma organização eficiente.
+- **Gestão de Funcionários**: Controle informações dos funcionários, incluindo registro de horários de trabalho e atividades realizadas.
+- **Sistema de Estoque**: Monitore e controle produtos e insumos utilizados, evitando desperdícios e faltas.
+- **Dashboard Centralizado**: Visualize dados importantes em um painel intuitivo e de fácil navegação.
 
-- #Facilidade de Identificação#: Facilitar a visualização de qual cliente foi registrado, uma vez que atualmente só são informados o tipo de serviço (como "cabelo") e o valor, o que leva a confusão.
+## Tecnologias Utilizadas
 
+- **Frontend**: React com Tailwind CSS para a interface do usuário.
+- **Backend**: Node.js (Express) para a lógica do servidor.
+- **Banco de Dados**: MySQL Workbench para armazenar e gerenciar informações.
+- **Deploy**: Configuração para publicação no Vercel.
 
-Conexao com db em producao--------------------------------
-const db = mysql.createConnection({
-  host: 'autorack.proxy.rlwy.net',
-  user: 'root',
-  password: 'OYOYuIszNSrTdpvDXrFDYMifRLFIKlsZ',
-  database: 'financeiro',
-  port: 53180
-});
+## Como Executar o Projeto
 
-Tabelas{
-    agendamento{
-        id_agendamento,
-        id_cliente FOREIGN,
-        servico_id FOREIGN,
-        produto_id FOREIGN,
-        Data_agendamento,
-    }
-
-    cliente{
-        id_cliente,
-        nome,
-        email,
-        senha,
-        numero,
-    }
-
-    operacoes{
-        add column
-        id_cliente FOREIGN
-    }
-} 
+1. Clone este repositório:
+   ```bash
+   git clone https://github.com/JAugusto777/barbearia-sistema.git
